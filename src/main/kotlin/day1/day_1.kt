@@ -1,10 +1,6 @@
 package day1
 
-import utils.println
 import utils.read
-import java.io.File
-import kotlin.io.path.Path
-import kotlin.io.path.readText
 
 val DAY = "day1"
 
@@ -38,6 +34,6 @@ fun part2(input: String): Int {
 fun main() {
     check(part1(read(DAY, "test1")) == 142)
     check(part2(read(DAY, "test2")) == 281)
-    part1(read(DAY)).println()
-    part2(read(DAY)).println()
+    part1(read(DAY)).let { println("Part 1: $it") }
+    part2(read(DAY)).let { println("Part 2: $it") }
 }

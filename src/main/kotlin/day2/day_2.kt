@@ -1,25 +1,19 @@
+package day2
+
+import utils.read
 import java.io.File
 
-val testData = """
-    Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-    Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
-    Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
-    Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
-    Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
-""".trimIndent()
+val DAY = "day2"
 
 data class Draw(val red: Int, val green: Int, val blue: Int)
 data class Game(val index: Int, val draws: List<Draw>)
 
 fun main() {
-    println(parseData(testData))
-    println(part1(Draw(12, 13, 14), parseData(testData)))
+    check(part1(Draw(12, 13, 14), parseData(read(DAY, "test"))) == 8)
+    check(part2(parseData(read(DAY, "test"))) == 2286)
 
-    val input = File("src/main/kotlin/day_2_data.txt").readText()
-    println(part1(Draw(12, 13, 14), parseData(input)))
-
-    println(part2(parseData(testData)))
-    println(part2(parseData(input)))
+    println(part1(Draw(12, 13, 14), parseData(read(DAY, "input"))))
+    println(part2(parseData(read(DAY, "input"))))
 
 }
 
@@ -28,7 +22,7 @@ fun part1(limit: Draw, games: List<Game>): Int {
         .sumOf { it.index }
 }
 
-fun part2(games: List<Game>): Long {
+fun part2(games: List<Game>): Int {
     return games.map {
         val draws = it.draws
         var r = 0
@@ -39,7 +33,7 @@ fun part2(games: List<Game>): Long {
             if (it.green > g) g = it.green
             if (it.blue > b) b = it.blue
         }
-        (r * g * b).toLong()
+        (r * g * b)
     }.sumOf { it }
 }
 
