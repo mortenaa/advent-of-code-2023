@@ -2,7 +2,7 @@ package template
 
 import utils.read
 
-const val DAY = "template"
+const val DAY = "dayDD"
 
 fun main() {
     check(part1(read(DAY, "test")) == 42)
