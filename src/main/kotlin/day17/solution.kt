@@ -8,9 +8,9 @@ const val DAY = "day17"
 
 fun main() {
     check(part1(read(DAY, "test")) == 102)
-    //check(part2(read(DAY, "test")) == 42)
+    check(part2(read(DAY, "test")) == 94)
 
-    //part1(read(DAY, "input")).also { println("Part 1: $it") }
+    part1(read(DAY, "input")).also { println("Part 1: $it") }
     //part2(read(DAY, "input")).also { println("Part 2: $it") }
 }
 
@@ -45,22 +45,25 @@ fun part1(input: String): Int {
     val cols = map.first().size
     val start = State(0 to 0, E, 0)
     val queue = mutableListOf(start)
-    val dist = mutableMapOf(start to Int.MAX_VALUE)
+    val dist = mutableMapOf(start to 0)
     fun add(prev: State, new: State, next: Pos) {
         val d = map[next.first][next.second].digitToInt() + dist[prev]!!
-        if (d < (dist[new] ?: Int.MAX_VALUE)) dist[new] = d
-        queue.add(new)
+        if (d < (dist[new] ?: Int.MAX_VALUE)) {
+            dist[new] = d
+            queue.add(new)
+        }
+
     }
     while (!queue.isEmpty()) {
         val state = queue.minBy { dist[it] ?: Int.MAX_VALUE }
         queue.remove(state)
-        if (state.pos == rows to cols) {
-            println(dist[state])
-            continue
+        if (state.pos == rows-1 to cols-1) {
+            println(state)
+            return dist[state]!!
         }
         // South
         var next = state.pos.copy(first = state.pos.first+1)
-        if (next.first < rows-1) {
+        if (next.first < rows) {
             if (state.direction in listOf(E, W)) {
                 add(state, State(pos = next, direction = S, line = 1), next)
             } else if (state.direction == S && state.line < 3) {
@@ -69,7 +72,7 @@ fun part1(input: String): Int {
         }
         // North
         next = state.pos.copy(first = state.pos.first-1)
-        if (next.first > 0) {
+        if (next.first >= 0) {
             if (state.direction in listOf(E, W)) {
                 add(state, State(pos = next, direction = N, line = 1), next)
             } else if (state.direction == N && state.line < 3) {
@@ -78,7 +81,7 @@ fun part1(input: String): Int {
         }
         // East
         next = state.pos.copy(second = state.pos.second+1)
-        if (next.second < cols-1) {
+        if (next.second < cols) {
             if (state.direction in listOf(N, S)) {
                 add(state, State(pos = next, direction = E, line = 1), next)
             } else if (state.direction == E && state.line < 3) {
@@ -86,8 +89,8 @@ fun part1(input: String): Int {
             }
         }
         // West
-        next = state.pos.copy(second = state.pos.second+1)
-        if (next.second > 0) {
+        next = state.pos.copy(second = state.pos.second-1)
+        if (next.second >= 0) {
             if (state.direction in listOf(N, S)) {
                 add(state, State(pos = next, direction = W, line = 1), next)
             } else if (state.direction == W && state.line < 3) {
@@ -96,7 +99,7 @@ fun part1(input: String): Int {
         }
 
     }
-
+    println(dist.filter { it.key.pos == Pos(rows-1, cols-1) }.values)
 
 
 
